@@ -1,8 +1,7 @@
-package ykim81.cs.brown.edu.mydreceiver;
+package ykim81.cs.brown.edu.messengertest;
 
 import java.util.List;
 
-import android.nfc.NdefRecord;
 import android.widget.Toast;
 import org.ndeftools.Message;
 import org.ndeftools.Record;
@@ -36,7 +35,7 @@ public class MainActivity extends Activity {
     // initialize NFC
     nfcAdapter = NfcAdapter.getDefaultAdapter(this);
     nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, this.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-    if (nfcAdapter == null) {
+    if(nfcAdapter == null) {
       Toast.makeText(this, "NFC not available on this device",
               Toast.LENGTH_SHORT).show();
     }
@@ -46,7 +45,7 @@ public class MainActivity extends Activity {
     Log.d(TAG, "enableForegroundMode");
 
     IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED); // filter for all
-    IntentFilter[] writeTagFilters = new IntentFilter[]{tagDetected};
+    IntentFilter[] writeTagFilters = new IntentFilter[] {tagDetected};
     nfcAdapter.enableForegroundDispatch(this, nfcPendingIntent, writeTagFilters, null);
   }
 
@@ -61,18 +60,41 @@ public class MainActivity extends Activity {
     Log.d(TAG, "onNewIntent");
 
     if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-//      TextView textView = (TextView) findViewById(R.id.title);
-//      textView.setText("Hello NFC!");
-      Parcelable[] receivedArray = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-      if (receivedArray != null) {
-        NdefMessage receivedMessage = (NdefMessage) receivedArray[0];
-        NdefRecord[] attachedRecords = receivedMessage.getRecords();
-        Toast.makeText(this, "Received NFC!",
-                Toast.LENGTH_LONG).show();
-      } else {
-        Toast.makeText(this, "Received Blank Parcel", Toast.LENGTH_LONG).show();
+      TextView textView = (TextView) findViewById(R.id.title);
+
+      textView.setText("Hello NFC!");
+
+      Parcelable[] messages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+      if (messages != null) {
+
+        Log.d(TAG, "Found " + messages.length + " NDEF messages"); // is almost always just one
+
+        vibrate(); // signal found messages :-)
+
+        // parse to records
+        for (int i = 0; i < messages.length; i++) {
+          try {
+            List<Record> records = new Message((NdefMessage)messages[i]);
+
+            Log.d(TAG, "Found " + records.size() + " records in message " + i);
+
+            for(int k = 0; k < records.size(); k++) {
+              Log.d(TAG, " Record #" + k + " is of class " + records.get(k).getClass().getSimpleName());
+
+              Record record = records.get(k);
+
+              if(record instanceof AndroidApplicationRecord) {
+                AndroidApplicationRecord aar = (AndroidApplicationRecord)record;
+                Log.d(TAG, "Package is " + aar.getDomain() + " " + aar.getType());
+              }
+
+            }
+          } catch (Exception e) {
+            Log.e(TAG, "Problem parsing message", e);
+          }
+
+        }
       }
-//      vibrate();
     } else {
       // ignore
     }
@@ -103,7 +125,7 @@ public class MainActivity extends Activity {
   private void vibrate() {
     Log.d(TAG, "vibrate");
 
-    Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE) ;
     vibe.vibrate(500);
   }
 

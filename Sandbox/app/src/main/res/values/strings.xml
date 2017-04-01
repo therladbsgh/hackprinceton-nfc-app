@@ -1,0 +1,4 @@
+<resources>
+    <string name="hello">Hello World, HelloWorldNFCActivity!</string>
+    <string name="app_name">MessengerTest</string>
+</resources>
