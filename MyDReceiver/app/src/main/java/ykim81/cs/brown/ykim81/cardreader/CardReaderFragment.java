@@ -25,16 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import ykim81.cs.brown.ykim81.common.logger.Log;
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -103,7 +93,6 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
     }
 
     private void enableReaderMode() {
-        Log.i(TAG, "Enabling reader mode");
         Activity activity = getActivity();
         NfcAdapter nfc = NfcAdapter.getDefaultAdapter(activity);
         if (nfc != null) {
@@ -112,7 +101,6 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
     }
 
     private void disableReaderMode() {
-        Log.i(TAG, "Disabling reader mode");
         Activity activity = getActivity();
         NfcAdapter nfc = NfcAdapter.getDefaultAdapter(activity);
         if (nfc != null) {

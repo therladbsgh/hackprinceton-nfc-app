@@ -18,7 +18,6 @@ package ykim81.cs.brown.ykim81.cardemulation;
 
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
-import ykim81.cs.brown.ykim81.common.logger.Log;
 
 import java.util.Arrays;
 
@@ -83,7 +82,6 @@ public class CardService extends HostApduService {
     // BEGIN_INCLUDE(processCommandApdu)
     @Override
     public byte[] processCommandApdu(byte[] commandApdu, Bundle extras) {
-        Log.i(TAG, "Received APDU: " + ByteArrayToHexString(commandApdu));
         // If the APDU matches the SELECT AID command for this service,
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
@@ -92,7 +90,6 @@ public class CardService extends HostApduService {
                     + AccountStorage.getBlind(this) + "¶"
                     + AccountStorage.getDeaf(this);
             byte[] accountBytes = account.getBytes();
-            Log.i(TAG, "Sending account number: " + account);
             return ConcatArrays(accountBytes, SELECT_OK_SW);
         } else {
             return UNKNOWN_CMD_SW;

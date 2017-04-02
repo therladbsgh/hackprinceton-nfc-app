@@ -18,7 +18,6 @@ package ykim81.cs.brown.ykim81.cardreader;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
-import ykim81.cs.brown.ykim81.common.logger.Log;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -60,7 +59,6 @@ public class LoyaltyCardReader implements NfcAdapter.ReaderCallback {
      */
     @Override
     public void onTagDiscovered(Tag tag) {
-        Log.i(TAG, "New tag discovered");
         // Android's Host-based Card Emulation (HCE) feature implements the ISO-DEP (ISO 14443-4)
         // protocol.
         //
@@ -73,10 +71,8 @@ public class LoyaltyCardReader implements NfcAdapter.ReaderCallback {
                 isoDep.connect();
                 // Build SELECT AID command for our loyalty card service.
                 // This command tells the remote device which service we wish to communicate with.
-                Log.i(TAG, "Requesting remote AID: " + SAMPLE_LOYALTY_CARD_AID);
                 byte[] command = BuildSelectApdu(SAMPLE_LOYALTY_CARD_AID);
                 // Send command to remote device
-                Log.i(TAG, "Sending: " + ByteArrayToHexString(command));
                 byte[] result = isoDep.transceive(command);
                 // If AID is successfully selected, 0x9000 is returned as the status word (last 2
                 // bytes of the result) by convention. Everything before the status word is
@@ -87,12 +83,10 @@ public class LoyaltyCardReader implements NfcAdapter.ReaderCallback {
                 if (Arrays.equals(SELECT_OK_SW, statusWord)) {
                     // The remote NFC device will immediately respond with its stored account number
                     String accountNumber = new String(payload, "UTF-8");
-                    Log.i(TAG, "Received: " + accountNumber);
                     // Inform CardReaderFragment of received account number
                     mAccountCallback.get().onAccountReceived(accountNumber);
                 }
             } catch (IOException e) {
-                Log.e(TAG, "Error communicating with card: " + e.toString());
             }
         }
     }
