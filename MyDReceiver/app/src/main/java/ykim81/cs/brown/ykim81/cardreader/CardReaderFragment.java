@@ -116,11 +116,11 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
             @Override
             public void run() {
                 String[] words = account.split("¶");
-                mAccountField.setText(words[0]);
-                mBlindField.setText(words[1]);
-                mDeafField.setText(words[2]);
+                mAccountField.setText(words[1]);
+                mBlindField.setText(words[2]);
+                mDeafField.setText(words[3]);
                 try {
-                    sendRequest(words[0], words[1], words[2]);
+                    sendRequest(words[0], words[1], words[2], words[3]);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Could not" +
                             "connect to the server. ",
@@ -130,10 +130,9 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
         });
     }
 
-    private void sendRequest(final String name, final String blind,
-                             final String deaf) {
+    private void sendRequest(final String id, final String name,
+                             final String blind, final String deaf) {
         RequestQueue myRequestQueue = Volley.newRequestQueue(getActivity());
-        final int id = (int) Math.random() * 100;
         String url = "https://apple-cake-24396.herokuapp.com/" + id;
         StringRequest MyStringRequest =
                 new StringRequest(Request.Method.POST,
@@ -151,7 +150,7 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
         }) {
             protected Map<String, String> getParams() {
                 Map<String, String> MyData = new HashMap<String, String>();
-                MyData.put("id", "" + id);
+                MyData.put("id", id);
                 MyData.put("name", name);
                 MyData.put("blind", blind);
                 MyData.put("deaf", deaf);

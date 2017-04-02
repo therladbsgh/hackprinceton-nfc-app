@@ -17,8 +17,10 @@
 
 package ykim81.cs.brown.ykim81.cardemulation;
 
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
 import ykim81.cs.brown.ykim81.common.activities.SampleActivityBase;
 
 /**
@@ -39,6 +41,12 @@ public class MainActivity extends SampleActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(NfcAdapter.getDefaultAdapter(this) == null) {
+            //Handle some NFC initialization here
+            Toast.makeText(this, "NFC not available on this device",
+                    Toast.LENGTH_LONG).show();
+        }
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

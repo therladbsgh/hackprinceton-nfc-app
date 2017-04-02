@@ -88,7 +88,8 @@ public class CardService extends HostApduService {
         // send the loyalty card account number, followed by a SELECT_OK status trailer (0x9000).
         if (Arrays.equals(SELECT_APDU, commandApdu)) {
             // SENDING INFORMATION
-            String account = AccountStorage.getName(this) + "¶"
+            String account = AccountStorage.getId(this) + "¶"
+                    + AccountStorage.getName(this) + "¶"
                     + AccountStorage.getBlind(this) + "¶"
                     + AccountStorage.getDeaf(this);
             byte[] accountBytes = account.getBytes();

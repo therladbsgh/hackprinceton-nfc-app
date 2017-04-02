@@ -30,6 +30,11 @@ import android.preference.PreferenceManager;
  */
 public class AccountStorage {
 
+    private static final String PREF_ID = "-1";
+    private static final String DEFAULT_ID = ""
+            + (int) Math.random() * 100000000;
+    private static String sId = null;
+
     private static final String PREF_NAME = "Placeholder";
     private static final String DEFAULT_NAME = "Bob";
     private static String sName = null;
@@ -47,6 +52,25 @@ public class AccountStorage {
     private static final String TAG = "AccountStorage";
     private static String sAccount = null;
     private static final Object sAccountLock = new Object();
+
+    public static void setId(Context c, String s) {
+        synchronized(sAccountLock) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+            prefs.edit().putString(PREF_ID, s).commit();
+            sId = s;
+        }
+    }
+
+    public static String getId(Context c) {
+        synchronized (sAccountLock) {
+            if (sId == null) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+                String name = prefs.getString(PREF_ID, DEFAULT_ID);
+                sId = name;
+            }
+            return sId;
+        }
+    }
 
     public static void setName(Context c, String s) {
         synchronized(sAccountLock) {
