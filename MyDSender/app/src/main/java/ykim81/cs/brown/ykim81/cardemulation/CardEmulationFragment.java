@@ -56,7 +56,7 @@ public class CardEmulationFragment extends Fragment {
             @Override
             public void onClick(View v) {
               Switch blind = (Switch) v.findViewById(R.id.blind_switch);
-              if (blind.isEnabled()) {
+              if (blind.isChecked()) {
                 AccountStorage.setBlind(getActivity(), "T");
               } else {
                 AccountStorage.setBlind(getActivity(), "F");
@@ -70,7 +70,7 @@ public class CardEmulationFragment extends Fragment {
           @Override
           public void onClick(View v) {
             Switch deaf = (Switch) v.findViewById(R.id.deaf_switch);
-            if (deaf.isEnabled()) {
+            if (deaf.isChecked()) {
               AccountStorage.setDeaf(getActivity(), "T");
             } else {
               AccountStorage.setDeaf(getActivity(), "F");
@@ -95,10 +95,7 @@ public class CardEmulationFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable s) {
             String account = s.toString();
-            String[] words = account.split("¶");
-            AccountStorage.setName(getActivity(), words[0]);
-            AccountStorage.setBlind(getActivity(), words[1]);
-            AccountStorage.setDeaf(getActivity(), words[2]);
+            AccountStorage.setName(getActivity(), account);
         }
     }
 

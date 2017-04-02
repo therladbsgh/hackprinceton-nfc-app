@@ -23,6 +23,7 @@
     <!-- NFC Reader Mode was added in API 19. -->
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application android:allowBackup="true"

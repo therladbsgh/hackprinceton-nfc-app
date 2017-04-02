@@ -24,7 +24,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import ykim81.cs.brown.ykim81.common.logger.Log;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Generic UI for sample discovery.
@@ -107,8 +127,49 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mAccountField.setText(account);
+                String[] words = account.split("¶");
+                mAccountField.setText(words[0]);
+                mBlindField.setText(words[1]);
+                mDeafField.setText(words[2]);
+                try {
+                    sendRequest(words[0], words[1], words[2]);
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "Could not" +
+                            "connect to the server. " + e.getStackTrace(),
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+
+    private void sendRequest(final String name, final String blind,
+                             final String deaf) {
+        RequestQueue myRequestQueue = Volley.newRequestQueue(getActivity());
+        final int id = (int) Math.random() * 100;
+        String url = "https://apple-cake-24396.herokuapp.com/" + id;
+        StringRequest MyStringRequest =
+                new StringRequest(Request.Method.POST,
+                        url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //This code is executed if the server responds, whether or not the response contains data.
+                //The String 'response' contains the server's response.
+            }
+        }, new Response.ErrorListener() { //Create an error listener to handle errors appropriately.
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //This code is executed if there is an error.
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                Map<String, String> MyData = new HashMap<String, String>();
+                MyData.put("id", "" + id);
+                MyData.put("name", name);
+                MyData.put("blind", blind);
+                MyData.put("deaf", deaf);
+                return MyData;
+            }
+        };
+        myRequestQueue.add(MyStringRequest);
     }
 }
