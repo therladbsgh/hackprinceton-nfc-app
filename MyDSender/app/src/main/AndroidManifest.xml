@@ -24,6 +24,7 @@
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <uses-feature android:name="android.hardware.nfc.hce" android:required="true" />
     <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application android:allowBackup="true"
         android:label="MyDSender"

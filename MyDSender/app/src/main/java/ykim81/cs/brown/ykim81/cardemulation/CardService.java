@@ -18,6 +18,8 @@ package ykim81.cs.brown.ykim81.cardemulation;
 
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -90,6 +92,12 @@ public class CardService extends HostApduService {
                     + AccountStorage.getBlind(this) + "¶"
                     + AccountStorage.getDeaf(this);
             byte[] accountBytes = account.getBytes();
+            Toast.makeText(getApplicationContext(), "Registered!",
+                    Toast.LENGTH_LONG).show();
+            Vibrator v = (Vibrator) getApplicationContext()
+                    .getSystemService(VIBRATOR_SERVICE);
+            // Vibrate for 500 milliseconds
+            v.vibrate(500);
             return ConcatArrays(accountBytes, SELECT_OK_SW);
         } else {
             return UNKNOWN_CMD_SW;

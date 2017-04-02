@@ -123,7 +123,7 @@ public class CardReaderFragment extends Fragment implements LoyaltyCardReader.Ac
                     sendRequest(words[0], words[1], words[2]);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), "Could not" +
-                            "connect to the server. " + e.getStackTrace(),
+                            "connect to the server. ",
                             Toast.LENGTH_LONG).show();
                 }
             }
